@@ -78,18 +78,34 @@ class Deobfuscator:
 
     def extract_base64(self, text: str) -> list:
         found = []
-        candidates = re.findall(r"\b[A-Za-z0-9+/]{8,}={0,2}\b|\b[A-Za-z0-9-_]{8,}={0,2}\b", text)
+        candidates = re.findall(r"[A-Za-z0-9+/]{8,}={0,3}", text)
+        url_safe = re.findall(r"[A-Za-z0-9\-_]{8,}={0,3}", text)
+        candidates.extend(url_safe)
         for cand in candidates:
-            padded = cand + ("=" * ((4 - len(cand) % 4) % 4))
+            clean = cand.rstrip("=")
+            if len(clean) % 4 == 1:
+                continue
+            padded = clean + ("=" * ((4 - len(clean) % 4) % 4))
             try:
-                raw_bytes = base64.b64decode(padded.encode("ascii"), validate=False)
+                raw_bytes = base64.b64decode(padded.encode("ascii"), validate=True)
                 decoded = raw_bytes.decode("utf-8", errors="ignore")
+                if not decoded:
+                    continue
                 ratio = sum(c.isalnum() or c.isspace() for c in decoded) / len(decoded)
                 if len(decoded) > 4 and ratio > 0.75:
                     found.append(decoded)
             except Exception:
-                continue
-        return found
+                try:
+                    raw_bytes = base64.b64decode(padded.encode("ascii"), validate=False)
+                    decoded = raw_bytes.decode("utf-8", errors="ignore")
+                    if not decoded:
+                        continue
+                    ratio = sum(c.isalnum() or c.isspace() for c in decoded) / len(decoded)
+                    if len(decoded) > 4 and ratio > 0.75:
+                        found.append(decoded)
+                except Exception:
+                    continue
+        return list(set(found))
 
     def check_rot13(self, text: str) -> str:
         decoded = codecs.decode(text, "rot_13")

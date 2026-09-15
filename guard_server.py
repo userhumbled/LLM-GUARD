@@ -1,6 +1,5 @@
 import os
 import sys
-import time
 import gradio as gr
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -22,7 +21,7 @@ class GuardPipeline:
         threat_thresh: float,
         toxic_thresh: float,
     ) -> tuple:
-        t0 = time.perf_counter()
+
         prep_data = self.deobfuscator.deobfuscate_prompt(prompt)
 
         primary_text = prep_data["inspected_text"]
@@ -35,7 +34,7 @@ class GuardPipeline:
                 tech_score = alt_score
 
         tox_scores = self.engine.eval_toxic_bert(primary_text)
-        latency = (time.perf_counter() - t0) * 1000
+
 
         is_tech_harm = (
             tech_score >= tech_thresh
@@ -83,7 +82,7 @@ class GuardPipeline:
         banner_html = f"""
         <div style="background-color: {bg}; border: 2px solid {border_col}; border-radius: 8px; padding: 18px; margin-bottom: 15px;">
             <h2 style="color: {border_col}; margin: 0 0 6px 0; font-size: 20px;">{decision}</h2>
-            <p style="color: #e5e7eb; margin: 0; font-size: 14px;"><strong>Diagnosis:</strong> {summary} | <strong>Latency:</strong> {latency:.2f} ms</p>
+            <p style="color: #e5e7eb; margin: 0; font-size: 14px;"><strong>Diagnosis:</strong> {summary}</p>
         </div>
         """
 

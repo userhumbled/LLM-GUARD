@@ -19,7 +19,7 @@ Runs on any machine with CPU, CUDA, or Apple MPS. Server or laptop, local or clo
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/prompp.git
+git clone https://github.com/userhumbled/LLM-GUARD.git
 cd prompp/v3
 ```
 

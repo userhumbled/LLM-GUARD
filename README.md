@@ -48,3 +48,9 @@ python guard_server.py
 
 ---
 
+## Test Results
+
+📄 [Prompt tests (git).pdf](Prompt%20tests%20(git).pdf) — real-world prompt injection test cases used to validate the guard.
+
+---
+

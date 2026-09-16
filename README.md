@@ -15,6 +15,12 @@ Runs on any machine with CPU, CUDA, or Apple MPS. Server or laptop, local or clo
 
 </div>
 
+##
+
+> **Demo video** [link](https://youtu.be/L4mPtlfjLKs?si=AbHKDS304Qy97UyU)
+
+
+
 ## Startup
 
 1. Clone the repository:
